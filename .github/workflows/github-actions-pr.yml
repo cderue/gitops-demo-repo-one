@@ -1,0 +1,41 @@
+name: GitHub PR Demo
+on: push
+
+jobs:
+    replicate-file:
+        runs-on: ubuntu-latest
+        name: Replicate Files
+
+        steps:
+        - name: Checkout GitOps Demo Repo One
+          uses: actions/checkout@v3
+          with:
+            path: ./gitops-demo-repo-one
+
+        - name: Checkout GitOps Demo Repo Two
+          uses: actions/checkout@main
+          with: 
+            repository: cderue/gitops-demo-repo-two
+            token: ${{ secrets.GITOPS_DEMO }}
+            path: ./gitops-demo-repo-two
+
+        - name: Copy/Create Files
+          run: |
+            SOURCE_DIR=./gitops-demo-repo-one/infra
+            DEST_DIR=././gitops-demo-repo-two/terraform
+            if [ -d "$SOURCE_DIR" ]; then
+              echo "Copying $SOURCE_DIR to $DEST_DIR"
+              cp -R $SOURCE_DIR $DEST_DIR
+            #else 
+            #  echo "Creating $DIR"
+            #  touch ./projectB/file
+            #fi
+
+        - name: Push to GitOps Demo Repo Two
+          run: |
+            cd ./gitops-demo-repo-two
+            git add .
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git commit -am "File Replicated from GitOps Demo Repo One"
+            git push
