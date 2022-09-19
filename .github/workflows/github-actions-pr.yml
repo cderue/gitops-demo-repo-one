@@ -22,14 +22,14 @@ jobs:
         - name: Copy/Create Files
           run: |
             SOURCE_DIR=./gitops-demo-repo-one/infra
-            DEST_DIR=././gitops-demo-repo-two/terraform
+            DEST_DIR=./gitops-demo-repo-two/terraform
             if [ -d "$SOURCE_DIR" ]; then
               echo "Copying $SOURCE_DIR to $DEST_DIR"
               cp -R $SOURCE_DIR $DEST_DIR
             #else 
             #  echo "Creating $DIR"
             #  touch ./projectB/file
-            #fi
+            fi
 
         - name: Push to GitOps Demo Repo Two
           run: |
